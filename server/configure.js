@@ -2,13 +2,19 @@ var connect = require('connect'),
 	path = require('path'),
 	routes = require('./routes'),
 	exphbs = require('express3-handlebars');
+	moment = require('moment');
 
 module.exports = function(app){
 
 	app.engine('handlebars', exphbs.create({
 		defaultLayout: 'main',
 		layoutsDir: app.get('views') + '/layouts',
-		partialsDir: [app.get('views') + '/partials'] // может быть массивом строк
+		partialsDir: [app.get('views') + '/partials'], // может быть массивом строк
+		helpers: {
+			timeago: function(timestamp){
+				return moment(timestamp).startOf('minute').fromNow();
+			}
+		}
 	}).engine);
 
 	app.set('view engine', 'handlebars');
